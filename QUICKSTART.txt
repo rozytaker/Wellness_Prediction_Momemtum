@@ -1,0 +1,42 @@
+MOMENTUM AFRICA — UC01 WELLNESS-LINKED LAPSE PREDICTION & GENAI RETENTION OUTREACH
+Quick start (local machine, for live demo)
+
+1. Install dependencies
+   pip install -r requirements.txt
+
+2. (Optional but recommended for the live LLM demo) Start Ollama with Qwen2.5
+   ollama serve
+   ollama pull qwen2.5
+   The app auto-detects Ollama at http://localhost:11434. If it's not running,
+   the dashboard still works end-to-end using a grounded template fallback —
+   it will never break mid-demo.
+
+3. Launch the dashboard
+   streamlit run app.py --server.port 8504
+
+4. In the sidebar, upload a client CSV or just use the bundled sample portfolio
+   (data/momentum_lapse_test_for_dashboard.csv, 317 held-out clients).
+
+Folder contents
+  app.py                 Streamlit dashboard (main entry point)
+  scoring.py              Loads the trained model + SHAP explainer, scores any uploaded CSV
+  genai_layer.py           ChromaDB knowledge base + Ollama/Qwen2.5 client + guardrail + fallback
+  data_generator.py        Regenerates the datasets from the raw IBM Telco CSV, if needed
+  train_model.py           Retrains the XGBoost model from data/momentum_lapse_train.csv
+  data/
+    momentum_lapse_train.csv               full labelled set (7,043 policies) used to train
+    momentum_lapse_test_for_dashboard.csv  317-policy holdout sample for the live demo upload
+  artifacts/              trained model pipeline, SHAP explainer, feature list, model card (JSON)
+  knowledge_base/         persisted ChromaDB collection of approved Multiply facts/offers
+
+To retrain from scratch
+  python data_generator.py
+  python train_model.py
+
+Notes for the demo
+  - The "actual_outcome_DEMO_ONLY" column in the test CSV is hidden from the model and only
+    used if you want to show live validation against ground truth — don't rename/remove the
+    other columns or scoring will fail with a clear "missing column" message in the sidebar.
+  - Gender is intentionally excluded from the model's features (fairness-by-design).
+  - Every number the LLM writes is checked against the ChromaDB-retrieved facts before being
+    shown; anything ungrounded silently falls back to the deterministic template.

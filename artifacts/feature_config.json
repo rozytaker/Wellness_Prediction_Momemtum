@@ -1,0 +1,39 @@
+{
+  "numeric": [
+    "num_dependants",
+    "policy_tenure_months",
+    "num_addon_riders",
+    "monthly_premium_zar",
+    "total_premiums_paid_zar",
+    "active_dayz_3m_avg",
+    "recharge_dayz_avg_weekly",
+    "gym_visits_monthly",
+    "lifestyle_quiz_score",
+    "lifestyle_quiz_score_delta_6m",
+    "health_assessment_days_since",
+    "partner_reward_redemptions_qtr",
+    "wellness_app_logins_monthly",
+    "multiply_points_balance",
+    "days_since_last_reward_earned",
+    "engagement_velocity_30d"
+  ],
+  "categorical": [
+    "senior_citizen",
+    "has_spouse_on_policy",
+    "premium_payment_term",
+    "digital_communication_opt_in",
+    "payment_method",
+    "product_type",
+    "market",
+    "multiply_tier",
+    "multiply_tier_change_direction"
+  ],
+  "drop": [
+    "policy_id",
+    "client_first_name",
+    "preferred_language",
+    "preferred_channel",
+    "gender"
+  ],
+  "target": "lapsed"
+}
