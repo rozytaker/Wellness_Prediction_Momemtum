@@ -288,47 +288,10 @@ ollama_up = ollama_available()
 # ---------------------------------------------------------------------------
 # Upload & generate gate
 # ---------------------------------------------------------------------------
-if "dashboard_ready" not in st.session_state:
-    st.session_state["dashboard_ready"] = False
 if "raw_df" not in st.session_state:
-    st.session_state["raw_df"] = None
+    st.session_state["raw_df"] = _load_default_test_set()
 if "source_label" not in st.session_state:
-    st.session_state["source_label"] = ""
-
-if not st.session_state["dashboard_ready"]:
-    _, center_col, _ = st.columns([1, 2, 1])
-    with center_col:
-        st.markdown(f"""
-        <div style="background:{CARD}; border-radius:18px; padding:40px 48px;
-                    box-shadow:0 2px 12px rgba(11,31,61,0.08); margin-bottom:24px;">
-          <div style="color:{TERRACOTTA}; font-size:11px; font-weight:700; text-transform:uppercase;
-                      letter-spacing:0.12em; margin-bottom:8px;">Step 1</div>
-          <div style="font-family:'Sora',sans-serif; font-size:22px; font-weight:700;
-                      color:{NAVY}; margin-bottom:6px;">Upload your client portfolio</div>
-          <div style="font-size:13.5px; color:{MUTED};">
-            Upload a CSV extract or skip to use the bundled sample portfolio (317 clients).
-          </div>
-        </div>
-        """, unsafe_allow_html=True)
-        uploaded = st.file_uploader("Client CSV (optional)", type=["csv"], label_visibility="collapsed")
-        st.write("")
-        run = st.button("🚀  Generate Analytics", type="primary", use_container_width=True)
-
-    if run:
-        if uploaded is not None:
-            try:
-                df = pd.read_csv(uploaded)
-                st.session_state["raw_df"] = df
-                st.session_state["source_label"] = uploaded.name
-            except Exception as e:
-                st.error(f"Could not read file: {e}")
-                st.stop()
-        else:
-            st.session_state["raw_df"] = _load_default_test_set()
-            st.session_state["source_label"] = "Sample portfolio (317 clients, held out)"
-        st.session_state["dashboard_ready"] = True
-        st.rerun()
-    st.stop()
+    st.session_state["source_label"] = "Sample portfolio (317 clients, held out)"
 
 raw_df = st.session_state["raw_df"]
 source_label = st.session_state["source_label"]
